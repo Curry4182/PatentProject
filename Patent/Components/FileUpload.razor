@@ -1,0 +1,112 @@
+﻿@using System.Threading
+@using System.IO
+
+@inject IJSRuntime JS
+@implements IFileUpload
+
+@*@inject ModalService _modalService*@
+@*@implements IFileUpload*@
+
+@ChildContent
+
+@code {
+    private CancellationTokenSource cancelation;
+
+    private int progressPercent;
+
+    private string _fileName;
+
+    [Parameter]
+    public string FileName { get; set; }
+
+    private string _fileSavePath;
+
+    private IBrowserFile _file;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public IFileUploadParent ParentComponent { get; set; }
+
+
+    [Parameter]
+    public string FileSaveFolder
+    {
+        get
+        {
+            return _fileSavePath ?? "wwwroot\\img";
+        }
+
+        set
+        {
+            _fileSavePath = value;
+        }
+    }
+
+    [Parameter]
+    public string RecentUploadFilePath { get; set; }
+
+
+    bool displayProgress = false;
+
+    protected override void OnInitialized()
+    {
+        cancelation = new CancellationTokenSource();
+        ParentComponent.AddChildFileUpload(this);
+    }
+
+    public async Task FileOnChange(InputFileChangeEventArgs eventArgs)
+    {
+        _file = eventArgs.File;
+        await OnUploadFile();
+    }
+
+    public async Task OnUploadFile()
+    {
+        if (_file == null) return;
+
+        string uid = Guid.NewGuid().ToString().ToLower().Replace("-", "");
+        string fileName = uid + _file.Name;
+
+        FileName = fileName;
+        using var file = File.OpenWrite(Path.Combine(FileSaveFolder, fileName));
+        RecentUploadFilePath = Path.Combine(FileSaveFolder, fileName);
+
+        using var stream = _file.OpenReadStream(int.MaxValue);
+
+        var buffer = new byte[1096 * 4];
+        int bytesRead;
+        double totalRead = 0;
+
+        displayProgress = true;
+
+        //브라저와 서버 사이에 스트림을 연결한 상태에서
+        //buffer로 최대 1096*4 만큼만 바이트를 들고온다음
+        //읽어온 byte수를 byteRead에 반환.
+        //총 읽어와야하는 byte수는 person.Picture.Size임.
+
+        while ((bytesRead = await stream.ReadAsync(buffer, cancelation.Token)) != 0)
+        {
+            //totalRead에 읽어온 바이트 수를 반환.
+            totalRead += bytesRead;
+
+            await file.WriteAsync(buffer, cancelation.Token);
+
+            //totalRead는 지금까지 읽어온 바이트수.
+            //person.Picture.Size는 읽어와야하는 전체데이터 수.
+            progressPercent = (int)((totalRead / _file.Size) * 100);
+
+            //StateHasChanged();
+        }
+
+        await JS.InvokeAsync<object>("alert", "업로드가 완료되었습니다.");
+
+        displayProgress = false;
+    }
+
+    public void Dispose()
+    {
+        cancelation.Cancel();
+    }
+}

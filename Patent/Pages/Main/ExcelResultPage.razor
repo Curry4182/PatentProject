@@ -1,0 +1,99 @@
+﻿@page "/excelResultPage/{fileName?}"
+@using System.IO
+
+
+<body id="page-top">
+    <header class="masthead">
+        <div class="container px-4 px-lg-5 h-100">
+            <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-8 align-self-end">
+                    <h1 class="text-white font-weight-bold">결과화면 입니다.</h1>
+                    <hr class="divider" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                    <p class="text-white-75 mb-5">출원연도 데이터와 출원인 데이터 분석결과입니다.</p>
+                    <a class="btn btn-primary btn-xl" href="#about">Find Out More</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-section" id="about">
+        <div class=" px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1>출원연도 데이터 분석결과</h1>
+                    <LineChartComponent Labels="@dateChartLabel"
+                                        ValueList="@dateChartValueList"></LineChartComponent>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section" id="about">
+        <div class=" px-4 px-lg-5">
+
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1>출원인 데이터 분석결과입니다</h1>
+                    <PieChartComponent Labels="@applicantChartLabel"
+                                       ValueList="@applicantChartValueList">
+                    </PieChartComponent>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</body>
+
+
+@code {
+    private PatentProcess pp;
+    private PatentDateModel patentDate;
+
+    [Parameter]
+    public string FileName { get; set; }
+    private string[] dateChartLabel;
+    private List<double> dateChartValueList;
+
+    private string[] applicantChartLabel;
+    private List<double> applicantChartValueList;
+
+    protected override void OnInitialized()
+    {
+
+        FileName = FileName ?? @"air.xls";
+
+        string folderPath = @"C:\Users\FA506IU\source\repos\Patent\Patent\wwwroot\uploadFiles";
+
+        Console.WriteLine("path: ppppppp"  + folderPath);
+        string filePath = Path.Combine(folderPath, FileName);
+
+        pp = new PatentProcess(filePath);
+
+        patentDate = pp.GetYears(3);
+
+        dateChartLabel = new string[patentDate.Size];
+        dateChartValueList = new List<double>(patentDate.Size);
+        for (int i = 0; i < patentDate.Size; i++)
+        {
+            dateChartLabel[i] = (patentDate.MinTime.Year + patentDate.IntervalYear * i).ToString() + " - " + (patentDate.MinTime.Year + patentDate.IntervalYear * (i + 1)).ToString();
+            dateChartValueList.Add(patentDate.YearsCount[i]);
+        }
+
+        int applicantSize = 5;
+        var listPair = pp.GetApplicant();
+        applicantChartLabel = new string[applicantSize];
+        applicantChartValueList = new List<double>(applicantSize);
+
+        for (int i = 0; i < applicantSize; i++)
+        {
+            applicantChartLabel[i] = listPair[i].Key;
+            applicantChartValueList.Add(listPair[i].Value);
+        }
+
+        base.OnInitialized();
+    }
+}
