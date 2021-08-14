@@ -63,14 +63,9 @@
 
     protected override void OnInitialized()
     {
+        FileName = FileName ?? "air.xls";
 
-        FileName = FileName ?? @"air.xls";
-
-        string folderPath = @"C:\Users\FA506IU\source\repos\Patent\Patent\wwwroot\uploadFiles";
-
-        Console.WriteLine("path: ppppppp"  + folderPath);
-        string filePath = Path.Combine(folderPath, FileName);
-
+        string filePath = Path.GetFullPath(Path.Combine("wwwroot\\uploadFiles", FileName));
         pp = new PatentProcess(filePath);
 
         patentDate = pp.GetYears(3);

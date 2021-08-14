@@ -257,7 +257,6 @@
         await _fileUpload.FileOnChange(eventArgs);
 
         string uploadFileName = _fileUpload.FileName;
-
         NavigationManager.NavigateTo("/excelResultPage/" + uploadFileName);
     }
 }

@@ -35,7 +35,7 @@
     {
         get
         {
-            return _fileSavePath ?? "wwwroot\\img";
+            return _fileSavePath ?? "wwwroot\\uploadFiles";
         }
 
         set
@@ -71,7 +71,7 @@
 
         FileName = fileName;
         using var file = File.OpenWrite(Path.Combine(FileSaveFolder, fileName));
-        RecentUploadFilePath = Path.Combine(FileSaveFolder, fileName);
+        RecentUploadFilePath = Path.GetFullPath(Path.Combine(FileSaveFolder, fileName));
 
         using var stream = _file.OpenReadStream(int.MaxValue);
 
