@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ganss.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +8,11 @@ namespace ExcelInterop
 {
     public class PatentProcess
     {
-        public ExcelMain excel { get; set; }
+        IList<PatentModel> patents;
         public PatentProcess(string filePath)
         {
-            excel = new ExcelMain(filePath);
+            var mapper = new ExcelMapper(filePath) { HeaderRow = true, HeaderRowNumber = 7};
+            patents = mapper.Fetch<PatentModel>().ToList();
         }
         //엑셀 파일위치를 입력으로하면
         //출원일자를 size 간격만큼 저장한 후 반환합니다.
@@ -20,9 +22,10 @@ namespace ExcelInterop
             var dates = new List<DateTime>();
 
             DateTime min = DateTime.MaxValue, max = DateTime.MinValue;
-            foreach (var str in excel.GetColByString("출원일자"))
+            foreach (var patent in patents)
             {
-                var date = Convert.ToDateTime(str.Replace(".", "-"));
+                if(patent.ApplicationDate == null) continue;
+                var date = Convert.ToDateTime(patent.ApplicationDate.Replace(".", "-"));
                 dates.Add(Convert.ToDateTime(date));
 
                 min = date < min ? date : min;
@@ -49,15 +52,16 @@ namespace ExcelInterop
         public List<KeyValuePair<string, int>> GetApplicant()
         {
             var applicantDic = new Dictionary<string, int>();
-            foreach (var str in excel.GetColByString("출원인"))
+            foreach (var patent in patents)
             {
-                if (!applicantDic.ContainsKey(str))
+                if (patent.Applicant == null) continue;
+                if (!applicantDic.ContainsKey(patent.Applicant))
                 {
-                    applicantDic.Add(str, 1);
+                    applicantDic.Add(patent.Applicant, 1);
                 }
                 else
                 {
-                    applicantDic[str] = applicantDic[str] + 1;
+                    applicantDic[patent.Applicant] = applicantDic[patent.Applicant] + 1;
                 }
             }
 
