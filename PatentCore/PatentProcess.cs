@@ -25,15 +25,16 @@ namespace ExcelInterop
             foreach (var patent in patents)
             {
                 if(patent.ApplicationDate == null) continue;
-                var date = Convert.ToDateTime(patent.ApplicationDate.Replace(".", "-"));
-                dates.Add(Convert.ToDateTime(date));
 
+                var date = Convert.ToDateTime(patent.ApplicationDate.Replace(".", "-"));
+
+                dates.Add(Convert.ToDateTime(date));
                 min = date < min ? date : min;
                 max = date > max ? date : max;
             }
 
-            patentDate.Size = Convert.ToInt32((max.Year - min.Year) / intervalYear) + 1;
-            patentDate.YearsCount = new int[patentDate.Size];
+            int yearsCountSize = Convert.ToInt32((max.Year - min.Year) / intervalYear) + 1;
+            patentDate.YearsCount = new int[yearsCountSize];
             patentDate.IntervalYear = intervalYear;
 
             foreach (var date in dates)
@@ -45,6 +46,7 @@ namespace ExcelInterop
             patentDate.Dates = dates;
             patentDate.MinTime = min;
             patentDate.MaxTime = max;
+            patentDate.Size = dates.Count();
 
             return patentDate;
         }

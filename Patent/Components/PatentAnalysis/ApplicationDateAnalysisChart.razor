@@ -25,9 +25,9 @@
     {
         patentDate = PatentProcess.GetApplicationDate(IntervalYear);
 
-        dateChartLabel = new string[patentDate.Size];
-        dateChartValueList = new List<double>(patentDate.Size);
-        for (int i = 0; i < patentDate.Size; i++)
+        dateChartLabel = new string[patentDate.YearsCount.Length];
+        dateChartValueList = new List<double>(patentDate.YearsCount.Length);
+        for (int i = 0; i < patentDate.YearsCount.Length; i++)
         {
             dateChartLabel[i] = (patentDate.MinTime.Year + patentDate.IntervalYear * i).ToString() + " - " + (patentDate.MinTime.Year + patentDate.IntervalYear * (i + 1) -1 ).ToString();
             dateChartValueList.Add(patentDate.YearsCount[i]);
