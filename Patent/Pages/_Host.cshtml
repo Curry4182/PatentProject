@@ -30,6 +30,19 @@
     <link href="css/patentMain.css" rel="stylesheet" />
 
 
+    <script>
+        function BlazorScrollToId(id) {
+            const element = document.getElementById(id);
+            if (element instanceof HTMLElement) {
+                element.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "nearest"
+                });
+            }
+        }
+    </script>
+
     <!--Blazorise    -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="_content/Blazorise.Charts/blazorise.charts.js"></script>
