@@ -1,0 +1,36 @@
+﻿<div class=" px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1>출원연도 분석결과</h1>
+            <LineChartComponent Labels="@dateChartLabel"
+                                ValueList="@dateChartValueList"></LineChartComponent>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private PatentDateModel patentDate;
+
+    private string[] dateChartLabel;
+    private List<double> dateChartValueList;
+
+    [Parameter]
+    public IPatentProcess PatentProcess { get; set; }
+
+    [Parameter]
+    public int IntervalYear { get; set; }
+
+    protected override void OnInitialized()
+    {
+        patentDate = PatentProcess.GetApplicationDate(IntervalYear);
+
+        dateChartLabel = new string[patentDate.Size];
+        dateChartValueList = new List<double>(patentDate.Size);
+        for (int i = 0; i < patentDate.Size; i++)
+        {
+            dateChartLabel[i] = (patentDate.MinTime.Year + patentDate.IntervalYear * i).ToString() + " - " + (patentDate.MinTime.Year + patentDate.IntervalYear * (i + 1) -1 ).ToString();
+            dateChartValueList.Add(patentDate.YearsCount[i]);
+        }
+    }
+}

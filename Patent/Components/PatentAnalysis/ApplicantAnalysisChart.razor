@@ -1,0 +1,34 @@
+﻿<div class=" px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1>상위 출원인 특허 분석결과</h1>
+            <PieChartComponent Labels="@applicantChartLabel"
+                               ValueList="@applicantChartValueList">
+            </PieChartComponent>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public IPatentProcess PatentProcess{ get; set; }
+
+    private string[] applicantChartLabel;
+    private List<double> applicantChartValueList;
+
+    protected override void OnInitialized()
+    {
+        int applicantSize = 5;
+        var listPair = PatentProcess.GetApplicant();
+        applicantChartLabel = new string[applicantSize];
+        applicantChartValueList = new List<double>(applicantSize);
+
+        for (int i = 0; i < applicantSize; i++)
+        {
+            applicantChartLabel[i] = listPair[i].Key;
+            applicantChartValueList.Add(listPair[i].Value);
+        }
+
+    }
+}

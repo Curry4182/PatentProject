@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ExcelInterop
 {
-    public class PatentProcess
+    public class PatentProcess : IPatentProcess
     {
         IList<PatentModel> patents;
         public PatentProcess(string filePath)
@@ -16,7 +16,7 @@ namespace ExcelInterop
         }
         //엑셀 파일위치를 입력으로하면
         //출원일자를 size 간격만큼 저장한 후 반환합니다.
-        public PatentDateModel GetYears(int intervalYear = 5)
+        public PatentDateModel GetApplicationDate(int intervalYear = 5)
         {
             var patentDate = new PatentDateModel();
             var dates = new List<DateTime>();
