@@ -14,17 +14,19 @@
     [Parameter]
     public IPatentProcess PatentProcess{ get; set; }
 
+    [Parameter]
+    public int ApplicantSize { get; set; }
+
     private string[] applicantChartLabel;
     private List<double> applicantChartValueList;
 
     protected override void OnInitialized()
     {
-        int applicantSize = 5;
         var listPair = PatentProcess.GetApplicant();
-        applicantChartLabel = new string[applicantSize];
-        applicantChartValueList = new List<double>(applicantSize);
+        applicantChartLabel = new string[ApplicantSize];
+        applicantChartValueList = new List<double>(ApplicantSize);
 
-        for (int i = 0; i < applicantSize; i++)
+        for (int i = 0; i < ApplicantSize; i++)
         {
             applicantChartLabel[i] = listPair[i].Key;
             applicantChartValueList.Add(listPair[i].Value);

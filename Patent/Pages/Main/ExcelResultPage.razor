@@ -22,7 +22,7 @@
     </ApplicationDateAnalysisChart>
 
 
-    <ApplicantAnalysisChart PatentProcess="pp">
+    <ApplicantAnalysisChart PatentProcess="pp" ApplicantSize ="5">
     </ApplicantAnalysisChart>
 
 </body>
@@ -35,15 +35,16 @@
     [Parameter]
     public string FileName { get; set; }
 
-    
+
 
     protected override void OnInitialized()
     {
         FileName = FileName ?? "air.xls";
 
         string filePath = Path.GetFullPath(Path.Combine(PatentSystemConfig.SaveFolderPath, FileName));
-        pp = new PatentProcess(filePath);
 
+        int headerRow = 7;
+        pp = new PatentProcess(filePath, headerRow);
 
         base.OnInitialized();
     }

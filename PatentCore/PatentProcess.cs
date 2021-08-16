@@ -9,13 +9,12 @@ namespace ExcelInterop
     public class PatentProcess : IPatentProcess
     {
         IList<PatentModel> patents;
-        public PatentProcess(string filePath)
+        public PatentProcess(string filePath, int headerRowNumber = 7)
         {
-            var mapper = new ExcelMapper(filePath) { HeaderRow = true, HeaderRowNumber = 7};
+            var mapper = new ExcelMapper(filePath) { HeaderRow = true, HeaderRowNumber = headerRowNumber };
             patents = mapper.Fetch<PatentModel>().ToList();
         }
-        //엑셀 파일위치를 입력으로하면
-        //출원일자를 size 간격만큼 저장한 후 반환합니다.
+
         public PatentDateModel GetApplicationDate(int intervalYear = 5)
         {
             var patentDate = new PatentDateModel();
