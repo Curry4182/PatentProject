@@ -41,7 +41,7 @@
     {
         FileName = FileName ?? "air.xls";
 
-        string filePath = Path.GetFullPath(Path.Combine("wwwroot\\uploadFiles", FileName));
+        string filePath = Path.GetFullPath(Path.Combine(PatentSystemConfig.SaveFolderPath, FileName));
         pp = new PatentProcess(filePath);
 
 

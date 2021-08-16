@@ -35,7 +35,7 @@
     {
         get
         {
-            return _fileSavePath ?? "wwwroot\\uploadFiles";
+            return _fileSavePath ?? PatentSystemConfig.SaveFolderPath;
         }
 
         set
@@ -80,7 +80,7 @@
         double totalRead = 0;
 
         displayProgress = true;
-
+        
         //브라저와 서버 사이에 스트림을 연결한 상태에서
         //buffer로 최대 1096*4 만큼만 바이트를 들고온다음
         //읽어온 byte수를 byteRead에 반환.
