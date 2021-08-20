@@ -8,7 +8,7 @@ using Ganss.Excel;
 namespace ExcelInterop
 {
     public class PatentModel
-    {
+    {  
         [Column("순서")]
         public string Order { get; set; }
         [Column("심사진행상태")]
