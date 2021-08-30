@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using Patent.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Patent
 {
@@ -43,7 +45,8 @@ namespace Patent
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-           // services.AddSingleton<WeatherForecastService>();
+            // services.AddSingleton<WeatherForecastService>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services
             .AddBlazorise(options =>

@@ -3,11 +3,14 @@
         <li class="nav-item">
             <a a class="nav-link" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
         </li>
+        <li class="nav-item">
+            <form method="post" action="Identity/Account/LogOut">
+                <button type="submit" class="nav-link btn btn-link"><u>Log out</u></button>
+            </form>        
+        </li>
 
-        <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
-        </form>
-</Authorized>
+        
+    </Authorized>
     <NotAuthorized>
 
         <li class="nav-item"> <a class="nav-link" href="Identity/Account/Register"><u>Register</u></a></li>
