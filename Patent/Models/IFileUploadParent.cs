@@ -1,5 +1,4 @@
-﻿using Patent.Components;
-
+﻿
 namespace Patent.Models
 {
     public interface IFileUploadParent

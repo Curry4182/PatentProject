@@ -43,7 +43,7 @@ namespace Patent
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
+           // services.AddSingleton<WeatherForecastService>();
 
             services
             .AddBlazorise(options =>
