@@ -37,7 +37,8 @@ namespace Patent.Services
                 Credentials = new NetworkCredential(fromMail, fromPassword),
                 EnableSsl = true,
             };
-            smtpClient.Send(message);
+
+            await Task.Run ( () => smtpClient.Send(message));
         }
     }
 }
