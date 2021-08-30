@@ -46,8 +46,8 @@ namespace Patent
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             // services.AddSingleton<WeatherForecastService>();
-            services.AddTransient<IEmailSender, EmailSender>();
-
+            services.AddSingleton<IEmailSender>(e => new EmailSender("kangbk41882@gmail.com", "dfwrqihlnbmpygwk"));
+           
             services
             .AddBlazorise(options =>
             {
