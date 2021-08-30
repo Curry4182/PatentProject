@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PatentCore\PatentCore.csproj" />
+    <ProjectReference Include="..\Sender\Sender.csproj" />
   </ItemGroup>
 
 </Project>

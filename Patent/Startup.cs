@@ -20,6 +20,7 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Patent.Services;
+using Sender;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Patent
@@ -46,8 +47,17 @@ namespace Patent
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             // services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<IEmailSender>(e => new EmailSender("kangbk41882@gmail.com", "dfwrqihlnbmpygwk"));
-           
+            services.AddSingleton<IEmailSender>(e => new EmailSender("" +
+                "kangbk41882@gmail.com", 
+                "dfwrqihlnbmpygwk")
+            );
+
+            services.AddSingleton<IMessageSender>(e => new MessageSender(
+                     "01046784188",
+                     "NCSBAXMKUG71F1PS",
+                     "JAC0CLTVK4THC14YJXYAVTGDN4HVYT5K"
+                )
+            );
             services
             .AddBlazorise(options =>
             {

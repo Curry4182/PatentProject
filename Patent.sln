@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patent", "Patent\Patent.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatentCore", "PatentCore\PatentCore.csproj", "{FC3D7327-8720-4F10-9F37-4BFA8B2DAD54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sender", "Sender\Sender.csproj", "{FA46D330-B796-48A5-BCD2-DD04B1A8D4F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FC3D7327-8720-4F10-9F37-4BFA8B2DAD54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC3D7327-8720-4F10-9F37-4BFA8B2DAD54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC3D7327-8720-4F10-9F37-4BFA8B2DAD54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA46D330-B796-48A5-BCD2-DD04B1A8D4F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA46D330-B796-48A5-BCD2-DD04B1A8D4F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA46D330-B796-48A5-BCD2-DD04B1A8D4F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA46D330-B796-48A5-BCD2-DD04B1A8D4F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
