@@ -49,15 +49,16 @@ namespace Patent
             // services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IEmailSender>(e => new EmailSender("" +
                 "kangbk41882@gmail.com", 
-                "dfwrqihlnbmpygwk")
+                "dfwrqihlnbmpygwk"
+                )
             );
 
             services.AddSingleton<IMessageSender>(e => new MessageSender(
                      "01046784188",
-                     "NCSBAXMKUG71F1PS",
-                     "JAC0CLTVK4THC14YJXYAVTGDN4HVYT5K"
+                     new MessageCore("NCSBAXMKUG71F1PS","JAC0CLTVK4THC14YJXYAVTGDN4HVYT5K")
                 )
             );
+
             services
             .AddBlazorise(options =>
             {

@@ -10,28 +10,18 @@ namespace Sender
     public class MessageSender : IMessageSender
     {
         private MessageContainer messages;
-        private MessageCore MessageCore;
+        private MessageCore messageCore;
         private readonly string phoneNumber;
 
 
         public MessageSender(
             string phoneNumber,
-            string apiKey,
-            string apiSecret,
-            string domain = "api.solapi.com",
-            string protocol = "https",
-            string prefix = ""
+            MessageCore messageCore
             )
         {
             this.phoneNumber = phoneNumber;
-            messages = new MessageContainer();
-            MessageCore = new MessageCore(
-                    apiKey,
-                    apiSecret,
-                    domain,
-                    protocol,
-                    prefix
-                );
+            this.messages = new MessageContainer();
+            this.messageCore = messageCore;
         }
 
         public async Task<bool> SendEmailAsync(string toPhoneNumber, string text)
@@ -43,7 +33,7 @@ namespace Sender
                 Text = text
             });
 
-            Response response = await Task.Run ( () => MessageCore.SendMessages(messages));
+            Response response = await Task.Run ( () => messageCore.SendMessages(messages));
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {

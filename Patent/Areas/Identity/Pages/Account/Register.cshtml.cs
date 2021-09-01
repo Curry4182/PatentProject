@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Sender;
 
 namespace Patent.Areas.Identity.Pages.Account
 {
@@ -23,17 +24,21 @@ namespace Patent.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IMessageSender _messageSender;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IMessageSender messageSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _messageSender = messageSender;
         }
 
         [BindProperty]
@@ -65,6 +70,8 @@ namespace Patent.Areas.Identity.Pages.Account
             [StringLength(11)]
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
