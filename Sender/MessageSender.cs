@@ -24,7 +24,7 @@ namespace Sender
             this.messageCore = messageCore;
         }
 
-        public async Task<bool> SendEmailAsync(string toPhoneNumber, string text)
+        public async Task<bool> SendMessageAsync(string toPhoneNumber, string text)
         {
             messages.Add(new Message()
             {

@@ -82,6 +82,7 @@ namespace Patent.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            System.Diagnostics.Debug.WriteLine("hello");
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
@@ -100,8 +101,22 @@ namespace Patent.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
+                    var callbackUrlSMS = Url.Page(
+                        "/Account/ConfirmPhoneNumber",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
+
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
+
+
+                    Console.WriteLine(callbackUrlSMS);
+                    await _messageSender.SendMessageAsync(Input.PhoneNumber,
+                       callbackUrlSMS);
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

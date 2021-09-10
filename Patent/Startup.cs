@@ -59,6 +59,7 @@ namespace Patent
                 )
             );
 
+            services.Configure<SMSoptions>(Configuration);
             services
             .AddBlazorise(options =>
             {

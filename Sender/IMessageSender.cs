@@ -8,6 +8,6 @@ namespace Sender
 {
     public interface IMessageSender
     {
-        public Task<bool> SendEmailAsync(string phoneNumber, string text);
+        public Task<bool> SendMessageAsync(string phoneNumber, string text);
     }
 }

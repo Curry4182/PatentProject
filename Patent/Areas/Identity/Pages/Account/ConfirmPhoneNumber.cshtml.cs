@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace Patent.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class ConfirmEmailModel : PageModel
+    public class ConfirmPhoneNumberModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmPhoneNumberModel(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -27,7 +27,6 @@ namespace Patent.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             Console.WriteLine("userId: " + userId + " code: " + code);
-
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");
@@ -40,8 +39,14 @@ namespace Patent.Areas.Identity.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            
+            var result = await _userManager.ChangePhoneNumberAsync(user, user.PhoneNumber, code);
+            if (result.Succeeded)
+            {
+                user.PhoneNumberConfirmed = true;
+                await _userManager.UpdateAsync(user);
+            }
+            StatusMessage = result.Succeeded ? "Thank you for confirming your phonenumber." : "Error confirming your phonenumber.";
             return Page();
         }
     }
