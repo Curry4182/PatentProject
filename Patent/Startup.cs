@@ -22,6 +22,7 @@ using Blazorise.Icons.FontAwesome;
 using Patent.Services;
 using Sender;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Utiles;
 
 namespace Patent
 {
@@ -58,6 +59,10 @@ namespace Patent
                      new MessageCore("NCSBAXMKUG71F1PS","JAC0CLTVK4THC14YJXYAVTGDN4HVYT5K")
                 )
             );
+
+            services.AddSingleton<IVerifyPhoneNumber>(e => new VerifyPhoneNumber());
+
+            services.AddSingleton<ISaveAndLoad, SaveAndLoad>();
 
             services.Configure<SMSoptions>(Configuration);
             services

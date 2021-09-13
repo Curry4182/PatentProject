@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Sender;
+using Utiles;
 
 namespace Patent.Areas.Identity.Pages.Account
 {
@@ -25,6 +26,9 @@ namespace Patent.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IMessageSender _messageSender;
+        private readonly IVerifyPhoneNumber _verifyPhoneNumber;
+        private readonly ISaveAndLoad _saveAndLoad;
+        private  string _phoneNumber;
 
 
         public RegisterModel(
@@ -32,13 +36,18 @@ namespace Patent.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IMessageSender messageSender)
+            IMessageSender messageSender,
+            IVerifyPhoneNumber verifyPhoneNumber,
+            ISaveAndLoad saveAndLoad
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _messageSender = messageSender;
+            _verifyPhoneNumber = verifyPhoneNumber;
+            _saveAndLoad = saveAndLoad;
         }
 
         [BindProperty]
@@ -47,6 +56,12 @@ namespace Patent.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+
+        public bool IsPhoneNumberConfirmed { get; set; }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public class InputModel
         {
@@ -66,28 +81,46 @@ namespace Patent.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required]
-            [StringLength(11)]
-            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
-
 
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        //public async Task OnGetAsync(string returnUrl = null)
+        //{
+        //    ReturnUrl = returnUrl;
+        //    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        //}
+
+        
+        private async Task LoadAsync(string phoneNumber)
         {
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var item = _saveAndLoad.Load(phoneNumber);
+
+            if (item is Tuple<bool> model)
+            {
+                IsPhoneNumberConfirmed = model.Item1;
+                Input.PhoneNumber = phoneNumber;
+            }
+        }
+
+        public async Task<IActionResult> OnGetAsync(string phoneNumber = null)
+        {
+            _phoneNumber = phoneNumber;
+            Input = new InputModel();
+
+            await LoadAsync(phoneNumber);
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            System.Diagnostics.Debug.WriteLine("hello");
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            await LoadAsync(Input.PhoneNumber);
+            if (ModelState.IsValid && IsPhoneNumberConfirmed)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.PhoneNumber};
+                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = _phoneNumber};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -101,22 +134,11 @@ namespace Patent.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    var callbackUrlSMS = Url.Page(
-                        "/Account/ConfirmPhoneNumber",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
+                   
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
-
-
-                    Console.WriteLine(callbackUrlSMS);
-                    await _messageSender.SendMessageAsync(Input.PhoneNumber,
-                       callbackUrlSMS);
-
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
