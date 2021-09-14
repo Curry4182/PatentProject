@@ -26,7 +26,6 @@ namespace Sender
 
         public async Task<bool> SendMessageAsync(string toPhoneNumber, string text)
         {
-            Console.WriteLine("text: " + text);
             messages = new MessageContainer();
             messages.Add(new Message()
             {

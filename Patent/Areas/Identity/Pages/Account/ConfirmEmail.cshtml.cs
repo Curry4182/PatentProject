@@ -26,7 +26,6 @@ namespace Patent.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
-            Console.WriteLine("userId: " + userId + " code: " + code);
 
             if (userId == null || code == null)
             {

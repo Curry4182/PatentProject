@@ -84,15 +84,8 @@ namespace Patent.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
 
         }
-
-        //public async Task OnGetAsync(string returnUrl = null)
-        //{
-        //    ReturnUrl = returnUrl;
-        //    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        //}
-
         
-        private async Task LoadAsync(string phoneNumber)
+        private void Load(string phoneNumber)
         {
             var item = _saveAndLoad.Load(phoneNumber);
 
@@ -108,7 +101,7 @@ namespace Patent.Areas.Identity.Pages.Account
             _phoneNumber = phoneNumber;
             Input = new InputModel();
 
-            await LoadAsync(phoneNumber);
+            Load(phoneNumber);
             return Page();
         }
 
@@ -117,7 +110,7 @@ namespace Patent.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            await LoadAsync(Input.PhoneNumber);
+            Load(Input.PhoneNumber);
             if (ModelState.IsValid && IsPhoneNumberConfirmed)
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = _phoneNumber};
