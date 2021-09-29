@@ -1,0 +1,69 @@
+﻿@inject NavigationManager NavigationManager
+@inject IPostRepository PostRepository
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+
+
+            <EditForm Model="@_post" OnValidSubmit="@CreateSubmit">
+                <DataAnnotationsValidator />
+                @*<ValidationSummary />*@
+
+                <div class="post-title">
+                    <textarea class="textarea_tit"
+                              @bind-value="_post.Title"
+                              @bind-value:event="onchange"
+                              placeholder="제목을 입력하세요">
+                    </textarea>
+                </div>
+
+                <CKEditor Id="MyEditor"
+                          @bind-Value=@_post.Content
+                          UrlToPostImage="https://localhost:44339/api/Images">
+                </CKEditor>
+
+
+                <hr>
+                <!-- Pager -->
+                <div class="d-flex flex-row-reverse">
+                    <div class="p-2">
+                        <button Shape="round"
+                                class="btn btn-primary rounded-pill"
+                                type="submit">
+                            create
+                        </button>
+                    </div>
+                </div>
+
+
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    EditModel editorOptions;
+    private Post _post;
+
+    [Parameter]
+    public Post Post { get; set; }
+
+    [Parameter]
+    public string Author { get; set; }
+
+    [Parameter]
+    public EventCallback<Post> OnCreateSubmitCallback { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _post = Post ?? new Post();
+        _post.Author = Author ?? _post.Author;
+    }
+
+    public async Task CreateSubmit()
+    {
+        await OnCreateSubmitCallback.InvokeAsync(_post);
+    }
+}

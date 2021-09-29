@@ -1,0 +1,154 @@
+﻿@page "/PostPage/{key}"
+@inject NavigationManager NavigationManager
+@inject IPostRepository PostRepository
+@inject IJSRuntime JSRuntime
+
+@if(_post != null){
+    <div class="col-sm-12 col-lg-12 p-0">
+        <header class="mt-5">
+            <h3><strong>@_post.Title</strong></h3>
+            <hr />
+        </header>
+
+        <div class="p-0 mb-5">
+            @((MarkupString)_post.Content)
+        </div>
+
+        <div class="post-buttom">
+            <div>
+                <h6 style="color:#35b69f">@_comments.Count() Comments</h6>
+            </div>
+
+            <AuthorizeView>
+                <Authorized>
+                    @if (_post.Author == context.User.Identity.Name)
+                    {
+                        <div class="justify-content-md-between">
+                            <a href="EditPost/@_post.PostId"><span>수정</span></a>
+                            <a class="cursor-pointer" @onclick="() => OnPostDelete(_post.PostId)"><span>삭제</span></a>
+                        </div>
+                    }
+                </Authorized>
+            </AuthorizeView>
+
+            
+        </div>
+        <hr>
+
+        <AuthorizeView>
+            <Authorized>
+                <PostCommentInput OnAddCommentCallback="OnCommentAdd"
+                                  OnCancelButtonCallback="(comment) => comment.Content=string.Empty"
+                                  Author=@context.User.Identity.Name>
+                </PostCommentInput>
+            </Authorized>
+        </AuthorizeView>
+
+        @foreach (var comment in _comments)
+        {
+            if (!comment.IsEdit)
+            {
+                <PostComment Comment="comment"
+                             OnDeleteCallback="OnCommentDelete"
+                             OnCommentEditCallback="(comment) => comment.IsEdit=true" 
+                             >
+
+                </PostComment>
+            }
+            else
+            {
+                <PostCommentInput CommentModel="comment"
+                                  OnAddCommentCallback="OnCommentEditAsync"
+                                  OnCancelButtonCallback="(comment) => comment.IsEdit=false">
+                </PostCommentInput>
+            }
+        }
+    </div>
+    
+}else
+{
+    <p> Loading.. </p>
+}
+
+
+@code {
+
+    [Parameter]
+    public string Key { get; set; }
+
+    private Post _post;
+
+    public IList<CommentModel> _comments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!int.TryParse(Key, out int key)) NavigationManager.NavigateTo("/Index");
+
+        _post = PostRepository.GetPostById(key);
+
+        if(_post == null) NavigationManager.NavigateTo("/Index");
+        if (_post.Comments == null)
+        {
+            _post.Comments = new List<CommentModel>();
+        }
+
+        _comments = _post.Comments;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _post.VisitNum = _post.VisitNum + 1;
+        PostRepository.EditPost(_post);
+
+        await PostRepository.SavePostChagesAsync();
+    }
+
+    public async Task OnCommentAdd(CommentModel comment)
+    {
+        _comments.Add(comment);
+        StateHasChanged();
+
+        PostRepository.EditPost(_post);
+        await PostRepository.SavePostChagesAsync();
+    }
+
+    public async Task OnCommentDelete(CommentModel comment)
+    {
+
+        bool confirm = await JSRuntime.InvokeAsync<bool>("confirm", "정말로 삭제하시겠습니까?");
+
+        if (confirm)
+        {
+            _comments.Remove(comment);
+            StateHasChanged();
+
+            PostRepository.EditPost(_post);
+            await PostRepository.SavePostChagesAsync();
+            await JSRuntime.InvokeVoidAsync("alert", "삭제되었습니다.");
+        }
+    }
+
+    public async Task OnCommentEditAsync(CommentModel comment)
+    {
+        comment.IsEdit = false;
+        StateHasChanged();
+
+        PostRepository.EditPost(_post);
+        await PostRepository.SavePostChagesAsync();
+
+        await JSRuntime.InvokeVoidAsync("alert", "수정되었습니다.");
+    }
+
+    public async Task OnPostDelete(int postId)
+    {
+        bool confirm = await JSRuntime.InvokeAsync<bool>("confirm", "정말로 삭제하시겠습니까?");
+
+        if (confirm) {
+            PostRepository.DeletePost(postId);
+            await PostRepository.SavePostChagesAsync();
+
+            await JSRuntime.InvokeVoidAsync("alert", "삭제되었습니다.");
+            NavigationManager.NavigateTo("/Board");
+        }
+    }
+}

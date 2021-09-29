@@ -1,0 +1,36 @@
+﻿.id {
+    width: 5%;
+    text-align: center;
+}
+
+.caption {
+    width: 50%;
+    text-align: center;
+}
+
+.author {
+    width: 15%;
+    word-break: break-all;
+    text-align: center;
+}
+
+.date {
+    width: 10%;
+    word-break: break-all;
+    text-align: center;
+}
+
+.cnt {
+    width: 5%;
+    text-align: center;
+}
+
+.title-commentCount {
+    color: rgba(255,47,59,255);
+}
+
+.title-new {
+    color: rgba(255,47,59,255);
+    font-weight: 400;
+    
+}

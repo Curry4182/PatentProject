@@ -23,6 +23,8 @@ using Patent.Services;
 using Sender;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Utiles;
+using BoardProject.Repository;
+using BoardProject;
 
 namespace Patent
 {
@@ -42,6 +44,9 @@ namespace Patent
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<PostDbContext>(Option => Option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
@@ -60,7 +65,10 @@ namespace Patent
                 )
             );
 
-            services.AddSingleton<IVerifyPhoneNumber>(e => new VerifyPhoneNumber());
+            services.AddScoped<IPostRepository, PostRepository>();
+            //Board에서 쓰임 
+            services.AddScoped<BrowserService>();
+            services.AddSingleton<IVerifyPhoneNumber, VerifyPhoneNumber>();
 
             services.AddSingleton<ISaveAndLoad, SaveAndLoad>();
 

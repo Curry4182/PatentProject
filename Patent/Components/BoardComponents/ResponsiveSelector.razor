@@ -1,0 +1,50 @@
+﻿@inject BrowserService Service
+
+@if (Width > StandardWidth)
+{
+   @NormalTemplate 
+}
+else
+{
+   @SmallTemplate 
+}
+
+
+@code {
+    public int Height { get; set; }
+    public int Width { get; set; }
+
+
+    [Parameter]
+    public RenderFragment SmallTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment NormalTemplate { get; set; }
+
+    /// <summary>
+    /// StandardWidth보다 크면 NormalTemplate 출력
+    /// 아니면 SmallTemplate을 출력
+    /// </summary>
+    [Parameter]
+    public int StandardWidth { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //if (firstRender)
+        //{
+        //    var dimension = await Service.GetDimensions();
+        //    Height = dimension.Height;
+        //    Width = dimension.Width;
+        //    StateHasChanged();
+        //}
+        var dimension = await Service.GetDimensions();
+        Height = dimension.Height;
+        Width = dimension.Width;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,12 @@
+﻿.post-buttom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-buttom span {
+    margin: 0px;
+    padding: 0px;
+    margin-right: 5pt;
+    font-size: 10pt;
+    color: gray;
+}

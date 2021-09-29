@@ -1,0 +1,57 @@
+﻿.post-title {
+    width: 860px;
+    margin: 18px auto 17px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.post-title .textarea_tit {
+    display: block;
+    width: 100%;
+    height: 56px;
+    border: none;
+    font-size: 30px;
+    color: #202020;
+    font-family: Noto Sans DemiLight,AppleSDGothicNeo-Regular,Malgun Gothic,dotum,sans-serif;
+    resize: none;
+    outline: 0 none;
+    line-height: 40px;
+    overflow: hidden;
+    letter-spacing: -.4px;
+}
+
+.post-title .textarea_tit::placeholder {
+    colo r: #909090;
+}
+
+.post-title .textarea_tit.red::placeholder {
+    color: #f54;
+}
+
+.post-title .textarea_tit.red::-webkit-input-placeholder {
+    color: #f54;
+}
+
+.post-title .textarea_tit.red::-moz-placeholder {
+    color: #f54;
+}
+
+.post-title .textarea_tit.red:-ms-input-placeholder {
+    color: #f54;
+}
+
+.post-title .textarea_tit.red:-moz-placeholder {
+    color: #f54;
+}
+
+.html-editor .post-title {
+    width: auto;
+    margin: 25px 60px 0;
+    padding-bottom: 20px;
+    border-color: hsla(0,0%,100%,.05);
+}
+
+
+.ck-editor__editable {
+    min-height: 600px;
+}

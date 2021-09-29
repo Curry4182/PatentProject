@@ -1,0 +1,62 @@
+﻿<div class="container">
+    <div class="pagination p1 justify-content-center">
+        <ul class="d-flex justify-content-center col-sm-12">
+            <a class ="pre stop-dragging" @onclick="() => OnPageChange(_currIdx-1)">
+                <li>이전</li>
+            </a>
+
+            @for (int pageIdx = _startNumber; pageIdx < _startNumber + Pager.PagerButtonCount && pageIdx <= Pager.PageCount; pageIdx++)
+            {
+                var tmpNum = pageIdx;
+                @if (tmpNum == _currIdx + 1)
+                {
+                    <a class="is-active">
+                        <li>@tmpNum</li>
+                    </a>
+                    continue;
+                }
+
+                <a @onclick="() => OnPageChange(tmpNum-1)">
+                    <li>@tmpNum</li>
+                </a>
+            }
+
+            <a class="next stop-dragging" @onclick="() => OnPageChange(_currIdx+1)">
+                <li>다음</li>
+            </a>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+    private int _startNumber;
+    private int _currIdx;
+
+    [Parameter]
+    public PagerBase Pager { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChangeCallback { get; set; }
+
+    private int GetStart(int idx)
+    {
+        return ((idx) / Pager.PagerButtonCount) * Pager.PagerButtonCount + 1;
+    }
+
+    protected override void OnParametersSet()
+    {
+        _startNumber = GetStart(Pager.PageIndex);
+        _currIdx = Pager.PageIndex;
+    }
+
+    public void OnPageChange(int idx)
+    {
+        if (idx < 0) return;
+        if (idx >= Pager.PageCount) return;
+        _currIdx = idx;
+        _startNumber = GetStart(idx);
+        OnPageChangeCallback.InvokeAsync(idx);
+        StateHasChanged();
+    }
+}

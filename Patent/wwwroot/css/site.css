@@ -181,3 +181,20 @@ app {
         display: block;
     }
 }
+
+a {
+    cursor: pointer;
+}
+
+stop-dragging {
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/*ck에디터 최소 높이 설정*/
+.ck-editor__editable {
+    min-height: 500px;
+}

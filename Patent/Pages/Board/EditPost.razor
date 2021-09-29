@@ -1,0 +1,59 @@
+﻿@inject IPostRepository PostRepository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@page "/EditPost/{key}"
+
+
+<AuthorizeView>
+    <Authorized>
+        @if (_name != null && context.User.Identity.Name  == _name)
+        {
+            <CreatePostComponent Post=_post
+                                 OnCreateSubmitCallback="OnEditAsync">
+
+            </CreatePostComponent>
+        }
+        else
+        {
+            <h3><strong>접근 권한이 없습니다.</strong></h3>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <h3><strong>접근 권한이 없습니다.</strong></h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+@code {
+    [Parameter]
+    public string Key { get; set; }
+
+    public Post _post { get; set; }
+
+    private string _name;
+
+    protected override void OnParametersSet()
+    {
+        if(int.TryParse(Key, out int id))
+        {
+            _post = PostRepository.GetPostById(id);
+            _name = _post.Author;
+        }
+        else
+        {
+            _name = null;
+        }
+    }
+
+    public async Task OnEditAsync(Post post)
+    {
+        PostRepository.EditPost(post);
+        await PostRepository.SavePostChagesAsync();
+        await JSRuntime.InvokeVoidAsync("alert", "수정되었습니다.");
+
+        NavigationManager.NavigateTo("/Board");
+    }
+}

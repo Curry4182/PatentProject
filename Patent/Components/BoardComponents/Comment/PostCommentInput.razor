@@ -1,0 +1,86 @@
+﻿@inject IJSRuntime JS;
+
+@inject IPostRepository PostRepository
+
+
+<div class="mt-3 p-3 form-color">
+    <div class="d-flex flex-column">
+        <EditForm Model="@_commentModel" OnValidSubmit="@OnSubmitCaller">
+            <DataAnnotationsValidator />
+            @*<ValidationSummary />*@
+
+            <div class="d-flex flex-row mb-2">
+                <div class="">
+                    @Author
+                </div>
+            </div>
+
+            <div>
+                <textarea rows="2"
+                          class="form-control"
+                          placeholder="Enter your comment..."
+                          @bind="_commentModel.Content">
+
+                </textarea>
+            </div>
+
+            <div class="mt-2 text-right">
+
+                <button class="btn btn-primary btn-sm shadow-none btn-m"
+                        type="submit">
+                    등록하기
+                </button>
+
+                <button class="btn btn-outline-primary ml-1 shadow-none btn-m"
+                        type="button"
+                        @onclick="OnCancelButton">
+                    취소
+                </button>
+
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    private CommentModel _commentModel;
+
+    [Parameter]
+    public EventCallback<CommentModel> OnAddCommentCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<CommentModel> OnCancelButtonCallback { get; set; }
+
+    [Parameter]
+    public CommentModel CommentModel { get; set; }
+
+    [Parameter]
+    public string Author { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _commentModel = CommentModel ?? new CommentModel();
+        _commentModel.Author = Author ?? _commentModel.Author;
+    }
+
+    private void Reset()
+    {
+        _commentModel.Author = Author;
+        _commentModel.Password = "";
+        _commentModel.Content = "";
+    }
+
+    private async Task OnCancelButton()
+    {
+        await OnCancelButtonCallback.InvokeAsync(_commentModel);
+    }
+
+    private async Task OnSubmitCaller()
+    {
+        _commentModel.Avatar = @"https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg";
+        _commentModel.CommentDateTime = DateTime.Now;
+
+        await OnAddCommentCallback.InvokeAsync(_commentModel);
+    }
+}

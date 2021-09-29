@@ -1,0 +1,53 @@
+﻿.comment-text {
+    font-size: 15px;
+}
+
+.wish {
+    color: #35b69f;
+}
+
+.user-feed {
+    font-size: 12px;
+    margin-top: 12px
+}
+
+.comment-time {
+    font-size: 9px;
+    color: #b4b7c1;
+}
+
+.box-input-control {
+    display: flex;
+    font-size: 12px;
+    color: #b4b7c1;
+}
+
+.box-input-control-inner {
+    margin: 0px 5px;
+}
+
+.box-input {
+    margin: 4px 0px;
+}
+
+.inner-input {
+    border: 0.3px solid #ddd;
+    font-size: 15px;
+    border-radius: 3px;
+}
+
+.comment-author {
+    margin: 0px;
+    padding: 0px;
+    color: #35b69f;
+}
+
+.line-height-reset {
+    line-height: 1;
+}
+
+.btn-m {
+    font-size: 12px;
+    padding: 11px 9px;
+    border-radius: 3px;
+}

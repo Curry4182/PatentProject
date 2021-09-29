@@ -1,0 +1,32 @@
+﻿@typeparam TItem
+
+<div class="ArticleListItem">
+
+        @foreach (var item in Items)
+        {
+            <strong class="tit">
+                @if (TitleTemplate != null)
+                {
+                    @TitleTemplate(item)
+                }
+            </strong>
+            <div class="user_area">
+                <span>
+                    @if (RowTemplate != null)
+                    {
+                        @RowTemplate(item)
+                    }
+                </span>
+            </div>
+        }
+</div>
+@code {
+    [Parameter]
+    public IList<TItem> Items { get; set; }
+    
+    [Parameter]
+    public RenderFragment<TItem> TitleTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> RowTemplate { get; set; }
+}

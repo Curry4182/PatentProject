@@ -1,0 +1,36 @@
+﻿@page "/CreatePost"
+@inject IPostRepository PostRepository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<AuthorizeView>
+    <Authorized>
+        <CreatePostComponent Post=_post
+                             Author = "@context.User.Identity.Name"
+                             OnCreateSubmitCallback="OnCreateAsync">
+        </CreatePostComponent>
+    </Authorized>
+    <NotAuthorized>
+        <h3><strong>로그인 해주세요</strong></h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {     
+    private Post _post;
+
+    protected override void OnInitialized()
+    {
+        _post = new Post();
+        _post.Category = "일반";
+    }
+
+    public async Task OnCreateAsync(Post post)
+    {
+        PostRepository.AddPost(post);
+        await PostRepository.SavePostChagesAsync();
+
+        await JSRuntime.InvokeVoidAsync("alert", "작성이 완료되었습니다.");
+
+        NavigationManager.NavigateTo("/board");
+    }
+}

@@ -1,15 +1,13 @@
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Patent
+namespace ImageUpload
 {
     public class Program
     {
@@ -22,7 +20,6 @@ namespace Patent
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //webBuilder.UseStaticWebAssets();//css isolation 이 작동안해서 시험삼아 넣어봄
                     webBuilder.UseStartup<Startup>();
                 });
     }

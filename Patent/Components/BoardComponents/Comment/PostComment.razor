@@ -1,0 +1,84 @@
+﻿<div class="mt-2">
+    <div class="d-flex flex-row p-3">
+        <img src=@_comment.Avatar width="40" height="40" class="rounded-circle mr-3 img-cover">
+
+        <div class="w-100">
+            <div class="box-input d-flex justify-content-between align-items-center flex-end ">
+                <div class="d-flex flex-row flex-end line-height-reset ">
+                    <div class="mr-2">
+                        <h6 class="comment-author">
+                            @_comment.Author
+                        </h6>
+                    </div>
+                    <div class="line-height-reset">
+                        <span class="comment-time">
+                            <i class="far fa-clock"></i> @_comment.CommentDateTime.ToString("yyyy.MM.dd  HH:mm")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="box-input-control">
+
+                    <AuthorizeView>
+                        <Authorized>
+                            @if (context.User.Identity.Name == _comment.Author)
+                            {
+                                <div class="box-input-control-inner">
+                                    <span>
+                                        <a @onclick="OnEditCaller">  <i class="far fa-edit"></i> 수정  </a>
+                                    </span>
+                                </div>
+
+
+                                <div class="box-input-control-inner">
+                                    <span>
+                                        <a disabled="@_isDeleteButtonDisabled"
+                                           @onclick="OnDeleteCaller">  <i class="far fa-trash-alt"></i> 삭제  </a>
+                                    </span>
+                                </div>
+                            }
+                        </Authorized>
+                    </AuthorizeView>
+                    
+                </div>
+            </div>
+
+            <p class="comment-text mb-0">
+                @_comment.Content
+            </p>
+
+            @*<div class="d-flex flex-row user-feed">
+                <a><span class="wish"><i class="far fa-heart"></i> @_comment.LikeNum </span></a>
+                <a><span class="ml-3"><i class="far fa-comment-dots"></i> 답글 </span></a>
+            </div>*@
+        </div>
+
+        
+    </div>
+</div>
+
+@code {
+    private CommentModel _comment;
+
+    [Parameter]
+    public EventCallback<CommentModel> OnDeleteCallback{get; set;}
+
+    [Parameter]
+    public EventCallback<CommentModel> OnCommentEditCallback { get; set; }
+
+    [Parameter]
+    public CommentModel Comment { get { return _comment; } set { _comment = value; } }
+
+    bool _isDeleteButtonDisabled = false;
+
+    public async Task OnDeleteCaller()
+    {
+        await OnDeleteCallback.InvokeAsync(_comment);
+    }
+
+    public async Task OnEditCaller()
+    {
+        await OnCommentEditCallback.InvokeAsync(_comment);
+    }
+
+}

@@ -1,0 +1,36 @@
+﻿.list_board
+.list_area
+li.board_box
+.link_comment
+.num {
+    display: block;
+    font-size: 12px;
+    color: #000;
+    font-weight: 700
+}
+
+ul{
+    padding: 0px;
+    margin: 0px;
+}
+
+.user_area {
+    display: table;
+    position: relative;
+    width: 100%;
+    margin: 5px 0px;
+    padding: 0px;
+}
+
+.user_area span {
+    margin: 0px;
+    padding: 0px;
+    margin-right: 5pt;
+    font-size: 10pt;
+    color: gray;
+}
+
+.ArticleListItem a {
+    text-decoration: none;
+    color: black;
+}

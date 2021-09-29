@@ -1,0 +1,81 @@
+﻿@page "/searchPost/{option:int}/{input}"
+
+@inject IPostRepository PostRepository
+@inject NavigationManager NavigationManager
+
+<div class="main-box">
+
+    <div class="top-box">
+        <div class="search-box">
+            <SearchBox></SearchBox>
+        </div>
+    </div>
+
+
+    <div class="board">
+        <BoardComponent PagerBase="_pager" Posts="_posts">
+            <FooterTemplate>
+                <Patent.Components.BoardComponents.Pagination Pager=_pager
+                            OnPageChangeCallback="OnPageChange">
+                </Patent.Components.BoardComponents.Pagination>
+            </FooterTemplate>
+        </BoardComponent>
+    </div>
+
+</div>
+
+
+@code {
+    private IList<Post> _ResultPosts;
+    private IList<Post> _posts;
+    private int _pageSize;
+    private PagerBase _pager;
+
+    [Parameter]
+    public int Option { get; set; }
+
+    [Parameter]
+    public string Input { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        switch ((SearchOption)Option)
+        {
+            case SearchOption.TitleSearch:
+                _ResultPosts = await PostRepository.GetMatchingTitle(Input);
+                break;
+
+            case SearchOption.ContentSearch:
+                _ResultPosts = await PostRepository.GetMatchingContent(Input);
+                break;
+
+            case SearchOption.UserSearch:
+                _ResultPosts = await PostRepository.GetMatchingUser(Input);
+                break;
+        }
+
+        _pageSize = 10;
+        _posts = _ResultPosts.Take(_pageSize).ToList();
+        _pager = new PagerBase
+        {
+            RecordCount = _ResultPosts.Count,
+            PageSize = _pageSize, //페이지당 게시글 개수
+            PageIndex = 0, //기본 시작 페이지
+            PageNumber = 1,
+            PageCount = (int)Math.Ceiling(_ResultPosts.Count / (double)_pageSize),
+            PagerButtonCount = 5
+        };
+
+        StateHasChanged();
+    }
+
+
+    public async Task OnPageChange(int idx)
+    {
+        _pager.PageIndex = idx;
+        _pager.PageNumber = idx + 1;
+        _posts = _ResultPosts.Skip(_pageSize * idx).Take(_pageSize).ToList();
+        StateHasChanged();
+    }
+}

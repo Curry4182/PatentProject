@@ -1,0 +1,119 @@
+﻿
+@inject IPostRepository PostRepository
+@inject NavigationManager NavigationManager 
+
+@if (_posts != null)
+{
+    <ResponsiveSelector StandardWidth="600">
+        <NormalTemplate>
+            <NormalTable Items="_posts" Context="post">
+                <HeaderTemplate>
+                    <th class="id">번호</th>
+                    <th class="caption">제목</th>
+                    <th class="author">작성자</th>
+                    <th class="date">작성일</th>
+                    <th class="cnt">조회</th>
+                </HeaderTemplate>
+
+                <RowTemplate>
+                    <td class="id">@post.PostId</td>
+                    <td>
+                        <a @onclick="()=>PostNavigateTo(post.PostId.ToString())">
+                            @post.Title
+                            @if (post.Comments != null && post.Comments.Count != 0)
+                            {
+                                <span class="title-commentCount m-0 p-0">
+                                    [@post.Comments.Count]
+                                </span>
+                            }
+                            @if (DiffHoursFromToday(post.CreatedTime) <= 24)
+                            {
+                                <span class="title-new"> [new] </span>
+                            }
+                        </a>
+                    </td>
+                    <td class="author">@post.Author</td>
+                    <td class="date">@post.CreatedTime.ToString("yy.MM.dd")</td>
+                    <td class="cnt">@post.VisitNum</td>
+                </RowTemplate>
+
+                <FooterTemplate></FooterTemplate>
+            </NormalTable>
+        </NormalTemplate>
+
+        <SmallTemplate>
+            <SmallTable Items="_posts" Context="post">
+                <TitleTemplate>
+                    <a @onclick="()=>PostNavigateTo(post.PostId.ToString())">
+                        @post.Title
+                        @if (post.Comments != null && post.Comments.Count != 0)
+                        {
+                            <span class="title-commentCount">
+                                [@post.Comments.Count]
+                            </span>
+                        }
+                        @if (DiffHoursFromToday(post.CreatedTime) <= 24)
+                        {
+                            <span class="title-new"> [new] </span>
+                        }
+                    </a>
+                </TitleTemplate>
+                <RowTemplate>
+                    @post.Author
+                    @post.CreatedTime.ToString("yy.MM.dd")
+                    조회 @post.VisitNum
+                    <hr />
+                </RowTemplate>
+            </SmallTable>
+        </SmallTemplate>
+    </ResponsiveSelector>
+
+    <AuthorizeView>
+        <Authorized>
+            <div class="clearfix">
+                <a class="btn btn-primary float-right" href="/CreatePost">글쓰기</a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <div class="div-center">
+        @FooterTemplate
+
+    </div>
+}
+else
+{
+    <p>Loading..</p>
+}
+
+@code {
+    private IList<Post> _posts;
+    private int _pageSize;
+    private PagerBase _pager;
+    private bool _first;
+    private DateTime _today;
+
+    [Parameter]
+    public IList<Post> Posts { get { return _posts; } set { _posts = value; } }
+
+    [Parameter]
+    public PagerBase PagerBase { get { return _pager; } set { _pager = value; } }
+
+    [Parameter]
+    public RenderFragment FooterTemplate { get; set; }
+
+    public void PostNavigateTo(string id)
+    {
+        NavigationManager.NavigateTo("PostPage/" + id);
+    }
+
+    protected override void OnInitialized()
+    {
+        _today = DateTime.Today;
+    }
+
+    private int DiffHoursFromToday(DateTime date)
+    {
+        return (int)_today.Subtract(date).TotalHours;
+    }
+}

@@ -1,0 +1,58 @@
+﻿a {
+    text-decoration: none;
+
+}
+
+::selection {
+    background: none;
+    color: none;
+}
+
+p, li, a {
+    font-size: 14px;
+}
+
+
+.container {
+    width: 100%;
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0;
+    position: center;
+    text-align: center;
+}
+
+.pagination {
+    padding: 30px 0;
+}
+
+.pagination ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 10px 14px;
+    color: #222;
+}
+
+.p1 .is-active li {
+    font-weight: bold;
+    border-bottom: 3px solid #2ecc71;
+}
+
+a.pre a.next{
+    display: inline-block;
+    padding: 0px;
+}
+
+a.pre {
+    padding-left: 0px;
+}
+
+a.next{
+    padding-right: 0px;
+}
+
