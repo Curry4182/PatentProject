@@ -55,7 +55,7 @@
     [Parameter]
     public EventCallback<Post> OnCreateSubmitCallback { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         _post = Post ?? new Post();
         _post.Author = Author ?? _post.Author;

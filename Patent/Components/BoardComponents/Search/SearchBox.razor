@@ -50,9 +50,13 @@
 @code { 
     private SearchModel _searchModel;
 
-    private void OnSubmitCaller()
+    [Parameter]
+    public EventCallback<SearchModel> OnSearchCallback { get; set; }
+
+    private async Task OnSubmitCaller()
     {
         NavigationManager.NavigateTo($"/searchPost/{((int)_searchModel.Option)}/{_searchModel.SearchStr}");
+        //await OnSearchCallback.InvokeAsync(_searchModel);
     }
 
     protected override void OnInitialized()

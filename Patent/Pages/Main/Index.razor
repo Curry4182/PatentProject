@@ -167,7 +167,7 @@
     string fileSavePath;
     private IFileUpload _fileUpload;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         fileSavePath = "wwwroot\\uploadFiles";
     }
