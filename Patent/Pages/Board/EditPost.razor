@@ -4,26 +4,27 @@
 @page "/EditPost/{key}"
 
 
-<AuthorizeView>
-    <Authorized>
-        @if (_name != null && context.User.Identity.Name  == _name)
-        {
-            <CreatePostComponent Post=_post
-                                 OnCreateSubmitCallback="OnEditAsync">
+<div class="main-flex-post-box">
+    <AuthorizeView>
+        <Authorized>
+            @if (_name != null && context.User.Identity.Name == _name)
+            {
+                <CreatePostComponent Post=_post
+                                     OnCreateSubmitCallback="OnEditAsync">
 
-            </CreatePostComponent>
-        }
-        else
-        {
+                </CreatePostComponent>
+            }
+            else
+            {
+                <h3><strong>접근 권한이 없습니다.</strong></h3>
+            }
+        </Authorized>
+        <NotAuthorized>
             <h3><strong>접근 권한이 없습니다.</strong></h3>
-        }
-    </Authorized>
-    <NotAuthorized>
-        <h3><strong>접근 권한이 없습니다.</strong></h3>
-    </NotAuthorized>
-</AuthorizeView>
+        </NotAuthorized>
+    </AuthorizeView>
 
-
+</div>
 
 
 

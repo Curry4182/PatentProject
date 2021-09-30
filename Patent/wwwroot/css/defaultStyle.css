@@ -1,0 +1,40 @@
+﻿header.defaulthead {
+    padding-top: 10rem;
+    padding-bottom: calc(10rem - 4.5rem);
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("../assets/img/bg-masthead.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}
+
+@media screen and (max-width: 600px) {
+    .main-flex-box {
+        padding: 20px 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-flex-post-box {
+        padding: 100px 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .main-flex-box {
+        padding: 100px 100px 0px 100px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-flex-post-box {
+        padding: 100px 100px 0px 100px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+}

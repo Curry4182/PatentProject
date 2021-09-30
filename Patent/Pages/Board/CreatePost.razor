@@ -5,10 +5,12 @@
 
 <AuthorizeView>
     <Authorized>
-        <CreatePostComponent Post=_post
-                             Author = "@context.User.Identity.Name"
-                             OnCreateSubmitCallback="OnCreateAsync">
-        </CreatePostComponent>
+        <div class="main-box">
+            <CreatePostComponent Post=_post
+                                 Author="@context.User.Identity.Name"
+                                 OnCreateSubmitCallback="OnCreateAsync">
+            </CreatePostComponent>
+        </div>
     </Authorized>
     <NotAuthorized>
         <h3><strong>로그인 해주세요</strong></h3>

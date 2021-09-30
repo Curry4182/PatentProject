@@ -3,73 +3,76 @@
 @inject IPostRepository PostRepository
 @inject IJSRuntime JSRuntime
 
-@if(_post != null){
-    <div class="col-sm-12 col-lg-12 p-0">
-        <header class="mt-5">
-            <h3><strong>@_post.Title</strong></h3>
-            <hr />
-        </header>
+<div class="post-main main-flex-post-box">
 
-        <div class="p-0 mb-5">
-            @((MarkupString)_post.Content)
-        </div>
+    @if (_post != null)
+    {
+        <div class="col-sm-12 col-lg-12 p-0">
+            <header class="mt-5">
+                <h3><strong>@_post.Title</strong></h3>
+                <hr />
+            </header>
 
-        <div class="post-buttom">
-            <div>
-                <h6 style="color:#35b69f">@_comments.Count() Comments</h6>
+            <div class="p-0 mb-5">
+                @((MarkupString)_post.Content)
             </div>
+
+            <div class="post-buttom">
+                <div>
+                    <h6 style="color:#35b69f">@_comments.Count() Comments</h6>
+                </div>
+
+                <AuthorizeView>
+                    <Authorized>
+                        @if (_post.Author == context.User.Identity.Name)
+                        {
+                            <div class="justify-content-md-between">
+                                <a href="EditPost/@_post.PostId"><span>수정</span></a>
+                                <a class="cursor-pointer" @onclick="() => OnPostDelete(_post.PostId)"><span>삭제</span></a>
+                            </div>
+                        }
+                    </Authorized>
+                </AuthorizeView>
+
+
+            </div>
+            <hr>
 
             <AuthorizeView>
                 <Authorized>
-                    @if (_post.Author == context.User.Identity.Name)
-                    {
-                        <div class="justify-content-md-between">
-                            <a href="EditPost/@_post.PostId"><span>수정</span></a>
-                            <a class="cursor-pointer" @onclick="() => OnPostDelete(_post.PostId)"><span>삭제</span></a>
-                        </div>
-                    }
+                    <PostCommentInput OnAddCommentCallback="OnCommentAdd"
+                                      OnCancelButtonCallback="(comment) => comment.Content=string.Empty"
+                                      Author=@context.User.Identity.Name>
+                    </PostCommentInput>
                 </Authorized>
             </AuthorizeView>
 
-            
+            @foreach (var comment in _comments)
+            {
+                if (!comment.IsEdit)
+                {
+                    <PostComment Comment="comment"
+                                 OnDeleteCallback="OnCommentDelete"
+                                 OnCommentEditCallback="(comment) => comment.IsEdit=true">
+
+                    </PostComment>
+                }
+                else
+                {
+                    <PostCommentInput CommentModel="comment"
+                                      OnAddCommentCallback="OnCommentEditAsync"
+                                      OnCancelButtonCallback="(comment) => comment.IsEdit=false">
+                    </PostCommentInput>
+                }
+            }
         </div>
-        <hr>
 
-        <AuthorizeView>
-            <Authorized>
-                <PostCommentInput OnAddCommentCallback="OnCommentAdd"
-                                  OnCancelButtonCallback="(comment) => comment.Content=string.Empty"
-                                  Author=@context.User.Identity.Name>
-                </PostCommentInput>
-            </Authorized>
-        </AuthorizeView>
-
-        @foreach (var comment in _comments)
-        {
-            if (!comment.IsEdit)
-            {
-                <PostComment Comment="comment"
-                             OnDeleteCallback="OnCommentDelete"
-                             OnCommentEditCallback="(comment) => comment.IsEdit=true" 
-                             >
-
-                </PostComment>
-            }
-            else
-            {
-                <PostCommentInput CommentModel="comment"
-                                  OnAddCommentCallback="OnCommentEditAsync"
-                                  OnCancelButtonCallback="(comment) => comment.IsEdit=false">
-                </PostCommentInput>
-            }
-        }
-    </div>
-    
-}else
-{
-    <p> Loading.. </p>
-}
-
+    }
+    else
+    {
+        <p> Loading.. </p>
+    }
+</div>
 
 @code {
 
