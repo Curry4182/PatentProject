@@ -80,7 +80,7 @@
 
     public IList<CommentModel> _comments;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (!int.TryParse(Key, out int key)) NavigationManager.NavigateTo("/Index");
 
