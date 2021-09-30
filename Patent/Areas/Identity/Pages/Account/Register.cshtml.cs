@@ -96,7 +96,7 @@ namespace Patent.Areas.Identity.Pages.Account
             }
         }
 
-        public async Task<IActionResult> OnGetAsync(string phoneNumber = null)
+        public IActionResult OnGet(string phoneNumber = null)
         {
             _phoneNumber = phoneNumber;
             Input = new InputModel();

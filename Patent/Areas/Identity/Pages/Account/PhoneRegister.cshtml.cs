@@ -80,7 +80,7 @@ namespace Patent.Areas.Identity.Pages.Account
             return RedirectToAction("PhoneRegister", new { phoneNumber = Input.PhoneNumber });
         }
 
-        public async Task<IActionResult> OnPostVerifyPhoneNumberAsync()
+        public IActionResult OnPostVerifyPhoneNumber()
         {
             IsPhoneNumberConfirmed = _verifyPhoneNumber.CheckCode(Input.PhoneNumber, Input.Code);
 
@@ -115,14 +115,14 @@ namespace Patent.Areas.Identity.Pages.Account
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
 
             Load(Input.PhoneNumber);
 
             if (ModelState.IsValid && IsPhoneNumberConfirmed)
             {
-                _saveAndLoad.Save(Input.PhoneNumber, new Tuple<bool> (IsPhoneNumberConfirmed ));
+                _saveAndLoad.Save(Input.PhoneNumber, new Tuple<bool>(IsPhoneNumberConfirmed));
                 return RedirectToPage("Register", new { phoneNumber = Input.PhoneNumber });
             }
 
