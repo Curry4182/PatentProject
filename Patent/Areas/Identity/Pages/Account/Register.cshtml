@@ -35,7 +35,7 @@
 
             <div class="form-group">
                 <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <input readonly asp-for="Input.PhoneNumber" class="form-control" />
             </div>
 
             <button type="submit" class="btn btn-primary">Register</button>
@@ -44,16 +44,16 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h4>Use another service to register.</h4>
+            <h4>가입 안내</h4>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
+                            <p>
+                                휴대폰 인증을 하지 않은 경우 모든 정보를 입력하여도 가입이 되지 않습니다.
+                                휴대폰 인증을 안 한 경우 이전 단계들을 진행해 주시길 바랍니다.
+                            </p>
                     </div>
                 }
                 else
