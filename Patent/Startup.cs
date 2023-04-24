@@ -54,14 +54,14 @@ namespace Patent
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             // services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IEmailSender>(e => new EmailSender("" +
-                "kangbk41882@gmail.com", 
-                "dfwrqihlnbmpygwk"
+                "kangbk41882@gmail.com",
+                "hnlxbopgtpugiinh"
                 )
             );
 
             services.AddSingleton<IMessageSender>(e => new MessageSender(
                      "01046784188",
-                     new MessageCore("NCSBAXMKUG71F1PS","JAC0CLTVK4THC14YJXYAVTGDN4HVYT5K")
+                     new MessageCore("NCSHOKALZPQY9RCW", "ZR2LUOSHQT7E2GDGK9LBYA5Q4WI4ECJU")
                 )
             );
 
